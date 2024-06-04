@@ -1,0 +1,21 @@
+
+setwd("D:/111MVMR")
+--IVW------
+library(TwoSampleMR)
+id_exposure <- c("ebi-a-GCST002222","ebi-a-GCST002223","ebi-a-GCST002216") 
+id_outcome <- "ebi-a-GCST006414"  
+exposure_dat <- mv_extract_exposures(id_exposure,clump_r2 = 0.001,
+                                     clump_kb = 10000,
+                                     pval_threshold = 5e-08)  
+#save(exposure_dat,file="exp.rda")
+outcome_dat <- extract_outcome_data(exposure_dat$SNP, id_outcome) 
+#save(outcome_dat,file="out.rda")
+mvdat <- mv_harmonise_data(exposure_dat, outcome_dat)
+save(mvdat,file="mvdat.rda")
+res <- mv_multiple(mvdat)
+res
+res_OR<-generate_odds_ratios(res$result)
+res_OR
+write.csv(res_OR,'res_OR.csv')
+save(res_OR,file="res_OR.rda")
+
